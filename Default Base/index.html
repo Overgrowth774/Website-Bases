@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Base Hub</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08111f;
+      --bg-soft: #0f1b31;
+      --panel: rgba(13, 23, 41, 0.82);
+      --panel-border: rgba(134, 178, 255, 0.18);
+      --text: #e9f1ff;
+      --muted: #98aac8;
+      --accent: #6ee7ff;
+      --accent-2: #8b5cf6;
+      --accent-3: #34d399;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(110, 231, 255, 0.16), transparent 30%),
+        radial-gradient(circle at top right, rgba(139, 92, 246, 0.16), transparent 28%),
+        linear-gradient(180deg, #050b16 0%, var(--bg) 45%, #040811 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 85%);
+      opacity: 0.7;
+    }
+
+    .page {
+      position: relative;
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+      z-index: 1;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 0 28px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #07111d;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 10px 30px rgba(110, 231, 255, 0.22);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: 180ms ease;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+      border-color: var(--panel-border);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-top: 12px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-copy {
+      padding: 40px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-3);
+      box-shadow: 0 0 0 6px rgba(52, 211, 153, 0.15);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.6rem, 5vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      max-width: 10ch;
+    }
+
+    .lead {
+      max-width: 58ch;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111d;
+      box-shadow: 0 16px 30px rgba(110, 231, 255, 0.18);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--panel-border);
+    }
+
+    .stats {
+      display: grid;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .stat .value {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+    }
+
+    .stat .label {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-top: 22px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feature {
+      padding: 22px;
+      min-height: 180px;
+    }
+
+    .feature h2 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(110, 231, 255, 0.11);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .footer {
+      margin-top: 22px;
+      padding: 18px 0 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-copy {
+        padding: 28px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        width: min(100% - 20px, 1120px);
+        padding-top: 14px;
+      }
+
+      .hero-copy,
+      .stats,
+      .feature {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 14vw, 3.5rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div class="brand" aria-label="Base Website">
+        <div class="brand-mark">B</div>
+        <div>
+          <div>Website Base Hub</div>
+          <div style="color: var(--muted); font-size: 0.85rem; font-weight: 500; text-transform: none; letter-spacing: 0;">Starter layout</div>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="#bases">Bases</a>
+        <a href="#stats">Stats</a>
+        <a href="#creative">Creative</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <article class="card hero-copy">
+        <div class="eyebrow">Ready to customize</div>
+        <h1>Starter hub for multiple website bases.</h1>
+        <p class="lead">
+          This hub keeps the original base and adds specialized starter pages for search, games, drawing, and documents or slides.
+        </p>
+        <div class="actions">
+          <a class="button primary" href="#bases">Explore bases</a>
+          <button class="button secondary" id="pulseButton" type="button">Refresh accent</button>
+        </div>
+      </article>
+
+      <aside class="card stats" id="stats">
+        <div class="stat">
+          <span class="value">01</span>
+          <span class="label">Hub page that points to all the specialized bases.</span>
+        </div>
+        <div class="stat">
+          <span class="value">100%</span>
+          <span class="label">Responsive layout that works on desktop and mobile.</span>
+        </div>
+        <div class="stat">
+          <span class="value">Open</span>
+          <span class="label">Use each launcher file to open a base in a browser.</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="bases">
+      <div class="section-grid">
+        <article class="card feature">
+          <div class="badge">Search</div>
+          <h2>Search engine base</h2>
+          <p>A clean search landing page with a query bar and shortcut links.</p>
+        </article>
+        <article class="card feature">
+          <div class="badge">Game</div>
+          <h2>Game website base</h2>
+          <p>A simple game shell with a playable starter interaction and score area.</p>
+        </article>
+        <article class="card feature" id="creative">
+          <div class="badge">Creative</div>
+          <h2>Drawing and document bases</h2>
+          <p>A drawing canvas starter and a document or slides layout for notes and presentations.</p>
+        </article>
+      </div>
+    </section>
+
+    <p class="footer">Website base hub. Open the specialized starter pages from their own launcher files.</p>
+  </main>
+
+  <script>
+    const pulseButton = document.getElementById("pulseButton");
+    pulseButton.addEventListener("click", () => {
+      document.documentElement.style.setProperty("--accent", "#34d399");
+      document.documentElement.style.setProperty("--accent-2", "#60a5fa");
+      pulseButton.textContent = "Accent refreshed";
+      window.setTimeout(() => {
+        pulseButton.textContent = "Refresh accent";
+      }, 1200);
+    });
+  </script>
+</body>
+</html>

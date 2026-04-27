@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Base</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08101b;
+      --panel: rgba(13, 19, 35, 0.88);
+      --border: rgba(120, 170, 255, 0.18);
+      --text: #f2f7ff;
+      --muted: #9aabc8;
+      --accent: #f97316;
+      --accent-2: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.14), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.14), transparent 30%),
+        linear-gradient(180deg, #050b14, var(--bg));
+    }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 44px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 24px; box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35); backdrop-filter: blur(16px); }
+    .hero { padding: 30px; display: grid; gap: 20px; }
+    .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.75rem; font-weight: 700; }
+    h1 { margin: 10px 0 0; font-size: clamp(2.3rem, 6vw, 4.8rem); line-height: 0.95; letter-spacing: -0.05em; }
+    p { margin: 0; color: var(--muted); line-height: 1.7; max-width: 66ch; }
+    .arena { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 18px; margin-top: 18px; }
+    .playfield { padding: 24px; min-height: 420px; position: relative; overflow: hidden; }
+    .hud { padding: 24px; display: grid; gap: 16px; }
+    .stat { padding: 16px; border-radius: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.05); }
+    .label { display:block; color: var(--muted); font-size: 0.85rem; margin-bottom: 6px; }
+    .value { font-size: 1.6rem; font-weight: 800; }
+    .game-box {
+      margin-top: 16px;
+      height: 300px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px dashed rgba(255,255,255,0.12);
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .player {
+      width: 88px;
+      height: 88px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #fb923c, #f97316);
+      box-shadow: 0 18px 30px rgba(249, 115, 22, 0.25);
+      display:grid;
+      place-items:center;
+      font-size: 2rem;
+      font-weight: 900;
+      animation: float 2.2s ease-in-out infinite;
+    }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    button {
+      min-height: 46px; padding: 0 16px; border-radius: 14px; border: 0; cursor: pointer; font: inherit; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), #fb7185); color: #fff;
+    }
+    .secondary { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
+    .tip { margin-top: 12px; color: var(--muted); }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @media (max-width: 900px) { .arena { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card hero">
+      <div class="eyebrow">Game Base</div>
+      <div>
+        <h1>Game website starter.</h1>
+        <p>Use this as a base for arcade games, scoreboards, and simple interactive play. The current version gives you a ready-made game shell with a responsive HUD and play area.</p>
+      </div>
+    </section>
+
+    <section class="arena">
+      <article class="card playfield">
+        <h2>Play area</h2>
+        <div class="game-box" id="gameBox">
+          <div class="player" id="player">▲</div>
+        </div>
+        <div class="controls">
+          <button id="moveBtn" type="button">Move character</button>
+          <button id="scoreBtn" type="button" class="secondary">Add score</button>
+          <button id="resetBtn" type="button" class="secondary">Reset</button>
+        </div>
+        <div class="tip">This is a simple interactive base. Replace the placeholder with your real game loop later.</div>
+      </article>
+
+      <aside class="card hud">
+        <div class="stat"><span class="label">Score</span><span class="value" id="scoreValue">0</span></div>
+        <div class="stat"><span class="label">Level</span><span class="value" id="levelValue">1</span></div>
+        <div class="stat"><span class="label">Status</span><span class="value" id="statusValue">Ready</span></div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const player = document.getElementById("player");
+    const scoreValue = document.getElementById("scoreValue");
+    const levelValue = document.getElementById("levelValue");
+    const statusValue = document.getElementById("statusValue");
+    let score = 0;
+    let level = 1;
+    let offset = 0;
+
+    document.getElementById("moveBtn").addEventListener("click", () => {
+      offset = (offset + 24) % 120;
+      player.style.transform = `translateX(${offset - 60}px) rotate(${offset}deg)`;
+      statusValue.textContent = "Moving";
+    });
+
+    document.getElementById("scoreBtn").addEventListener("click", () => {
+      score += 10;
+      scoreValue.textContent = String(score);
+      if (score % 30 === 0) {
+        level += 1;
+        levelValue.textContent = String(level);
+      }
+      statusValue.textContent = "Scored";
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      score = 0;
+      level = 1;
+      offset = 0;
+      scoreValue.textContent = "0";
+      levelValue.textContent = "1";
+      player.style.transform = "";
+      statusValue.textContent = "Ready";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Engine Base</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07111e;
+      --panel: rgba(11, 20, 36, 0.88);
+      --border: rgba(135, 180, 255, 0.18);
+      --text: #ecf4ff;
+      --muted: #95a7c5;
+      --accent: #7dd3fc;
+      --accent-2: #a78bfa;
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(125, 211, 252, 0.14), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(167, 139, 250, 0.14), transparent 28%),
+        linear-gradient(180deg, #050b15, var(--bg));
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero {
+      padding: 34px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 10px 0 0;
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 62ch;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+    }
+
+    input, select, button, a.quick {
+      min-height: 50px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      font: inherit;
+    }
+
+    input, select {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      padding: 0 16px;
+      outline: none;
+    }
+
+    button, a.quick {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111d;
+      border: none;
+    }
+
+    .grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 22px;
+      min-height: 170px;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+    }
+
+    .panel ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .quick {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      min-height: 42px;
+      padding-inline: 14px;
+    }
+
+    .search-results {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .result {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .result strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .result span {
+      color: var(--muted);
+    }
+
+    @media (max-width: 860px) {
+      .search-row, .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card hero">
+      <div>
+        <div class="eyebrow">Search Engine Base</div>
+        <h1>Search-first website starter.</h1>
+        <p>Use this as a simple search engine base with a query box, quick links, and space for result cards or advanced filters later.</p>
+      </div>
+
+      <form id="searchForm" action="https://www.google.com/search" method="get" target="_blank">
+        <div class="search-row">
+          <input id="searchInput" name="q" type="search" placeholder="Search the web..." autocomplete="off" />
+          <button type="submit">Search</button>
+        </div>
+        <select name="engine" aria-label="Search engine">
+          <option>Open in browser search</option>
+        </select>
+      </form>
+
+      <div class="quick-links">
+        <a class="quick" href="https://www.google.com" target="_blank" rel="noreferrer">Google</a>
+        <a class="quick" href="https://www.bing.com" target="_blank" rel="noreferrer">Bing</a>
+        <a class="quick" href="https://duckduckgo.com" target="_blank" rel="noreferrer">DuckDuckGo</a>
+        <a class="quick" href="https://www.wikipedia.org" target="_blank" rel="noreferrer">Wikipedia</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card panel">
+        <h2>Search layers</h2>
+        <ul>
+          <li>Primary search box for fast navigation.</li>
+          <li>Quick links for common destinations.</li>
+          <li>Easy area to add filters or autocomplete.</li>
+        </ul>
+      </article>
+      <article class="card panel">
+        <h2>Result template</h2>
+        <div class="search-results">
+          <div class="result"><strong>Sample result one</strong><span>Title, snippet, and URL area for a search item.</span></div>
+          <div class="result"><strong>Sample result two</strong><span>Another result card showing how results could be listed.</span></div>
+        </div>
+      </article>
+      <article class="card panel">
+        <h2>Base notes</h2>
+        <ul>
+          <li>Double-click the launcher file to open this page.</li>
+          <li>Replace the search action with your own backend later.</li>
+          <li>Keep the layout lightweight and search-centered.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("searchForm").addEventListener("submit", (event) => {
+      const value = document.getElementById("searchInput").value.trim();
+      if (!value) {
+        event.preventDefault();
+        document.getElementById("searchInput").focus();
+      }
+    });
+  </script>
+</body>
+</html>

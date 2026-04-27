@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drawing Base</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07111b;
+      --panel: rgba(10, 18, 31, 0.9);
+      --border: rgba(135, 180, 255, 0.16);
+      --text: #eef4ff;
+      --muted: #96a8c5;
+      --accent: #f472b6;
+      --accent-2: #22d3ee;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: "Segoe UI", Arial, sans-serif; color: var(--text);
+      background: radial-gradient(circle at top right, rgba(244, 114, 182, 0.16), transparent 28%), radial-gradient(circle at bottom left, rgba(34, 211, 238, 0.14), transparent 30%), linear-gradient(180deg, #050a13, var(--bg));
+    }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 44px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 24px; box-shadow: 0 24px 80px rgba(0,0,0,0.35); backdrop-filter: blur(16px); }
+    .hero { padding: 30px; display: grid; gap: 18px; }
+    .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.75rem; font-weight: 700; }
+    h1 { margin: 8px 0 0; font-size: clamp(2.2rem, 6vw, 4.6rem); line-height: 0.95; letter-spacing: -0.05em; }
+    p { margin: 0; color: var(--muted); line-height: 1.7; max-width: 68ch; }
+    .layout { margin-top: 18px; display: grid; grid-template-columns: 1fr 300px; gap: 18px; }
+    .canvas-card { padding: 18px; }
+    canvas { width: 100%; height: 560px; display: block; border-radius: 20px; background: #fff; touch-action: none; cursor: crosshair; }
+    .tools { padding: 18px; display: grid; gap: 14px; align-content: start; }
+    label { display: grid; gap: 8px; color: var(--muted); font-size: 0.92rem; }
+    input[type="color"], input[type="range"], button { width: 100%; }
+    input[type="color"] { height: 52px; border: 0; background: transparent; padding: 0; }
+    input[type="range"] { accent-color: var(--accent); }
+    button {
+      min-height: 46px; border-radius: 14px; border: 0; cursor: pointer; font: inherit; font-weight: 700;
+      color: #07111d; background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+    .secondary { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
+    .row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } canvas { height: 420px; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card hero">
+      <div class="eyebrow">Drawing Base</div>
+      <div>
+        <h1>Drawing website starter.</h1>
+        <p>Use this as a base for sketching apps, whiteboards, annotation tools, or concept art pages. It already includes a drawing canvas and simple tool controls.</p>
+      </div>
+    </section>
+
+    <section class="layout">
+      <article class="card canvas-card">
+        <canvas id="canvas" width="1400" height="900"></canvas>
+      </article>
+      <aside class="card tools">
+        <label>Color
+          <input id="colorPicker" type="color" value="#f472b6" />
+        </label>
+        <label>Brush size
+          <input id="sizePicker" type="range" min="1" max="40" value="8" />
+        </label>
+        <div class="row">
+          <button id="penBtn" type="button">Pen</button>
+          <button id="eraserBtn" type="button" class="secondary">Eraser</button>
+        </div>
+        <button id="clearBtn" type="button" class="secondary">Clear canvas</button>
+        <button id="saveBtn" type="button" class="secondary">Download</button>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+    const colorPicker = document.getElementById("colorPicker");
+    const sizePicker = document.getElementById("sizePicker");
+    let drawing = false;
+    let erasing = false;
+
+    function resizeCanvas() {
+      const image = context.getImageData(0, 0, canvas.width, canvas.height);
+      const ratio = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * ratio;
+      canvas.height = rect.height * ratio;
+      context.putImageData(image, 0, 0);
+      context.scale(ratio, ratio);
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      context.lineWidth = Number(sizePicker.value);
+    }
+
+    function position(event) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    }
+
+    canvas.addEventListener("pointerdown", (event) => {
+      drawing = true;
+      const point = position(event);
+      context.beginPath();
+      context.moveTo(point.x, point.y);
+    });
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (!drawing) return;
+      const point = position(event);
+      context.strokeStyle = erasing ? "#ffffff" : colorPicker.value;
+      context.lineWidth = Number(sizePicker.value);
+      context.lineTo(point.x, point.y);
+      context.stroke();
+    });
+
+    window.addEventListener("pointerup", () => {
+      drawing = false;
+    });
+
+    document.getElementById("penBtn").addEventListener("click", () => { erasing = false; });
+    document.getElementById("eraserBtn").addEventListener("click", () => { erasing = true; });
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+    });
+    document.getElementById("saveBtn").addEventListener("click", () => {
+      const link = document.createElement("a");
+      link.download = "drawing.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+    sizePicker.addEventListener("input", () => { context.lineWidth = Number(sizePicker.value); });
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+  </script>
+</body>
+</html>
