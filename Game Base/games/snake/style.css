@@ -1,0 +1,5 @@
+:root{--bg:#0f1720;--snake:#7ee787;--food:#ff6b6b;--grid:#1b2330}
+html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:sans-serif}
+canvas{display:block;margin:12px auto;background:linear-gradient(180deg,#071018,#091621);box-shadow:0 6px 18px rgba(0,0,0,0.6);border-radius:6px}
+
+/* Easy texture: change --snake and --food colors */
